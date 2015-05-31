@@ -3,8 +3,7 @@
 var DOMElement = require('famous/dom-renderables/DOMElement');
 var FamousEngine = require('famous/core/FamousEngine');
 
-//var UI = new function() {
-//  var Button = new function() {
+
 function SocialMediaIcon(node, position, align, imageName, link) {
     this.node = node;
 
@@ -67,8 +66,6 @@ function SocialMediaIcon(node, position, align, imageName, link) {
 
     node.requestUpdate(spinner);
 };
-//   };
-//};
 
 
 module.exports = SocialMediaIcon;
