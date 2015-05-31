@@ -5,11 +5,9 @@ var FamousEngine = require('famous/core/FamousEngine');
 
 function BusinessCardManager(node) {
 
-
     this.node = node;
 
     var children = [];
-
 
     this.addChild = function(child) {
         children.push(child);
@@ -17,7 +15,7 @@ function BusinessCardManager(node) {
 
     var deltaTime = 0;
     var direction = 1;
-    var speed = 0.14;
+    var speed = 0.11;
     var refresher = node.addComponent({
         onUpdate: function (time) {
 
@@ -26,11 +24,19 @@ function BusinessCardManager(node) {
             if(deltaTime > (Math.PI / 2)) {
                 deltaTime = (Math.PI / 2);
                 direction = -1;
+
+                for (var index = 0; index < children.length; index++) {
+                    children[index].backSide.node.setScale(0,0,0);
+                }
             }
 
-            if(deltaTime < 0) {
-                deltaTime = 0;
+            if(deltaTime < -(Math.PI / 2)) {
+                deltaTime = -(Math.PI / 2);
                 direction = 1;
+
+                for (var index = 0; index < children.length; index++) {
+                    children[index].backSide.node.setScale(1,1,1);
+                }
             }
 
             for (var index = 0; index < children.length; index++) {
@@ -44,7 +50,6 @@ function BusinessCardManager(node) {
     });
 
     node.requestUpdate(refresher);
-
 
 };
 
