@@ -15,11 +15,13 @@ var context = FamousEngine.createScene();
 var cardManager = new BusinessCardManager(context.addChild());
 
 
-var temp = new BusinessCard(context.addChild(), './images/BusinessCards/card-bitheads.png', 'http://www.bitheads.com/');
+var bh = new BusinessCard(context.addChild(), './images/BusinessCards/card-bitheads.png', 'http://www.bitheads.com/');
+cardManager.addChild(bh);
 
-//cardManager.addChild(temp.node);
 
-cardManager.addChild(temp);
+var sl = new BusinessCard(context.addChild(), './images/BusinessCards/card-smokelabs.png', 'http://www.bitheads.com/');
+cardManager.addChild(sl);
+
 
 
 var fb = new SocialMediaIcon(context.addChild(), {x:-50, y:-50}, { x:1,y:1 }, './images/SocialMediaIcons/facebook.png', 'http://www.facebook.com/jonathan.mccaffrey.50' );

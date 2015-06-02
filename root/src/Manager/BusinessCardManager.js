@@ -9,40 +9,59 @@ function BusinessCardManager(node) {
 
     var children = [];
 
+
+    this.cardClicked = function(child) {
+
+
+    }
+
     this.addChild = function(child) {
         children.push(child);
+
+        for (var index = 0.0; index < children.length; index++) {
+            children[index].node.setAlign(
+                0.5,
+                (0.6 * (index  - (children.length / 2.0)) / (children.length)) + 0.5,
+                0);
+        }
     };
 
-    var deltaTime = 0;
-    var direction = 1;
-    var speed = 0.11;
+    var speed = 0.06;
     var refresher = node.addComponent({
         onUpdate: function (time) {
 
-            deltaTime += speed * direction;
+            for (var index = 0; index < children.length; index++) {
+                var direction = -1;
 
-            if(deltaTime > (Math.PI / 2)) {
-                deltaTime = (Math.PI / 2);
-                direction = -1;
+                if(children[index].state == 1)
+                {
+                    direction = 1;
+                }
 
-                for (var index = 0; index < children.length; index++) {
+
+                var deltaTime = children[index].delta;
+                deltaTime += speed * direction;
+
+
+                if(deltaTime > Math.PI) {
+                    deltaTime = Math.PI;
+                    direction = -1;
+
                     children[index].backSide.node.setScale(0,0,0);
                 }
-            }
 
-            if(deltaTime < -(Math.PI / 2)) {
-                deltaTime = -(Math.PI / 2);
-                direction = 1;
+                if(deltaTime < 0) {
+                    deltaTime = 0;
+                    direction = 1;
 
-                for (var index = 0; index < children.length; index++) {
                     children[index].backSide.node.setScale(1,1,1);
                 }
-            }
 
-            for (var index = 0; index < children.length; index++) {
-
+                children[index].delta = deltaTime;
 
                 children[index].node.setRotation(0, deltaTime, 0);
+
+
             }
 
             node.requestUpdateOnNextTick(refresher);
