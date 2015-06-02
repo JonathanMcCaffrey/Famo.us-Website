@@ -9,14 +9,10 @@ function BusinessCardManager(node) {
 
     var children = [];
 
-
-    this.cardClicked = function(child) {
-
-
-    }
-
     this.addChild = function(child) {
         children.push(child);
+
+        child.index = children.length;
 
         for (var index = 0.0; index < children.length; index++) {
             children[index].node.setAlign(

@@ -20,24 +20,22 @@ function BackSide(node) {
 }
 
 function BusinessCard(node, imageName, linktest) {
+    this.index = 0;
     this.link = linktest;
     this.delta = 0;
     this.state = 0;
     this.node = node;
     this.frontSide = new FrontSide(node.addChild(), imageName, this.link);
     this.backSide = new BackSide(node.addChild());
-    this.isClicked = false;
-
-    this.aname = 'trasd';
 
     this.node.setSizeMode('absolute', 'absolute', 'absolute').setAlign(0.5, 0.4, 0).setAbsoluteSize(262, 150).setMountPoint(0.5, 0.5).setOrigin(0.5, 0.5);
 
     var emitFrontCardSelected = function () {
-        this.node.emit('cardSelected', { state:1 });
+        this.node.emit('cardSelected', { state:1, id:this.index });
     }.bind(this);
 
     var emitBackCardSelected = function () {
-        this.node.emit('cardSelected', { state:0 });
+        this.node.emit('cardSelected', { state:0, id:this.index });
     }.bind(this);
 
 
@@ -55,17 +53,18 @@ function _bindEvents() {
     this.node.addComponent({
         onReceive: function(e, payload) {
             if (e === 'cardSelected') {
-                if(payload.state == 1) {
-                    this.state = 0;
-                } else {
-                    this.state = 1;
+                if (payload.id == this.index) {
+
+                    if (payload.state == 1) {
+                        this.state = 0;
+                    } else {
+                        this.state = 1;
+                    }
                 }
             }
         }.bind(this)
     });
 
 }
-
-
 
 module.exports = BusinessCard;
