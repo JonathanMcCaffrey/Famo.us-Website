@@ -6,7 +6,7 @@ var SocialMediaIcon = require('./UI/Button/SocialMediaIcon');
 
 var BusinessCardManager = require('./Manager/BusinessCardManager');
 var BusinessCard = require('./UI/Button/BusinessCard');
-
+var TestDragItem = require('./UI/Button/TestDragItem');
 
 
 FamousEngine.init();
@@ -22,7 +22,7 @@ cardManager.addChild(bh);
 var sl = new BusinessCard(context.addChild(), './images/BusinessCards/card-smokelabs.png', 'http://www.bitheads.com/');
 cardManager.addChild(sl);
 
-
+var tdi = new TestDragItem(context.addChild());
 
 var fb = new SocialMediaIcon(context.addChild(), {x:-50, y:-50}, { x:1,y:1 }, './images/SocialMediaIcons/facebook.png', 'http://www.facebook.com/jonathan.mccaffrey.50' );
 var li = new SocialMediaIcon(context.addChild(), {x:-125, y:-50}, { x:1,y:1 }, './images/SocialMediaIcons/linkedin.png', 'https://ca.linkedin.com/in/jonmcc' );

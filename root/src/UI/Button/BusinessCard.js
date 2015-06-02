@@ -5,7 +5,6 @@ var GestureHandler = require('famous/components/GestureHandler');
 
 var CARD_FRONT = 0;
 var CARD_BACK = 1;
-var CARD_DOUBLE_BACK = 2;
 
 function FrontSide(node, imageName, link) {
     this.node = node;
@@ -15,9 +14,9 @@ function FrontSide(node, imageName, link) {
 
 function BackSide(node) {
     this.node = node;
-    this.image = new DOMElement(node, {tagName: 'img'}).setAttribute('src', './images/BusinessCards/card-placeholder.png');
-    this.image.setProperty('cursor', 'pointer');
 
+    this.image = new DOMElement(node, {tagName: 'img', content: 'test'}).setAttribute('src', './images/BusinessCards/card-placeholder.png');
+    this.image.setProperty('cursor', 'pointer');
 }
 
 function BusinessCard(node, imageName, linktest) {
@@ -27,12 +26,11 @@ function BusinessCard(node, imageName, linktest) {
     this.state = CARD_FRONT;
     this.node = node;
 
-
     this.backSide = new BackSide(node.addChild());
     this.frontSide = new FrontSide(node.addChild(), imageName, this.link);
 
-    this.node.setSizeMode('absolute', 'absolute', 'absolute').setAlign(0.5, 0.4, 0).setAbsoluteSize(262, 150).setMountPoint(0.5, 0.5).setOrigin(0.5, 0.5);
 
+    this.node.setSizeMode('absolute', 'absolute', 'absolute').setAlign(0.5, 0.4, 0).setAbsoluteSize(262, 150).setMountPoint(0.5, 0.5).setOrigin(0.5, 0.5);
 
     var emitBackCardSelected = function () {
         this.node.emit('cardSelected', { state:CARD_BACK, id:this.index });
@@ -42,12 +40,28 @@ function BusinessCard(node, imageName, linktest) {
         this.node.emit('cardSelected', { state:CARD_FRONT, id:this.index });
     }.bind(this);
 
+    var emitCardDragged = function () {
+        this.node.emit('cardDragged', { id:this.index });
+    }.bind(this);
+
 
     this.backGesture = new GestureHandler(this.backSide.node);
     this.backGesture.on('tap', emitBackCardSelected);
+    this.backGesture.on('drag', emitCardDragged);
+
 
     this.frontGesture = new GestureHandler(this.frontSide.node);
     this.frontGesture.on('tap', emitFrontCardSelected);
+
+
+    this.backGesture.on('drag', function(index, e) {
+        this.node.setPosition(e.centerDelta.x, e.centerDelta.y, 0);
+    }.bind(this, this.index));
+
+
+    this.frontGesture.on('drag', function(index, e) {
+        this.node.setPosition(e.centerDelta.x, e.centerDelta.y, 0);
+    }.bind(this, this.index));
 
 
     _bindEvents.call(this);
@@ -57,6 +71,13 @@ function BusinessCard(node, imageName, linktest) {
 function _bindEvents() {
     this.node.addComponent({
         onReceive: function(e, payload) {
+            if (e === 'cardDragged') {
+
+
+
+            }
+
+
             if (e === 'cardSelected') {
                 if (payload.id == this.index) {
 
