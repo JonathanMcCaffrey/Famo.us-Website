@@ -17,33 +17,38 @@ function BackSide(node) {
     this.node = node;
     this.image = new DOMElement(node, {tagName: 'img'}).setAttribute('src', './images/BusinessCards/card-placeholder.png');
     this.image.setProperty('cursor', 'pointer');
+
 }
 
 function BusinessCard(node, imageName, linktest) {
     this.index = 0;
     this.link = linktest;
     this.delta = 0;
-    this.state = 0;
+    this.state = CARD_FRONT;
     this.node = node;
-    this.frontSide = new FrontSide(node.addChild(), imageName, this.link);
+
+
     this.backSide = new BackSide(node.addChild());
+    this.frontSide = new FrontSide(node.addChild(), imageName, this.link);
 
     this.node.setSizeMode('absolute', 'absolute', 'absolute').setAlign(0.5, 0.4, 0).setAbsoluteSize(262, 150).setMountPoint(0.5, 0.5).setOrigin(0.5, 0.5);
 
-    var emitFrontCardSelected = function () {
-        this.node.emit('cardSelected', { state:1, id:this.index });
-    }.bind(this);
 
     var emitBackCardSelected = function () {
-        this.node.emit('cardSelected', { state:0, id:this.index });
+        this.node.emit('cardSelected', { state:CARD_BACK, id:this.index });
     }.bind(this);
 
+    var emitFrontCardSelected = function () {
+        this.node.emit('cardSelected', { state:CARD_FRONT, id:this.index });
+    }.bind(this);
+
+
+    this.backGesture = new GestureHandler(this.backSide.node);
+    this.backGesture.on('tap', emitBackCardSelected);
 
     this.frontGesture = new GestureHandler(this.frontSide.node);
     this.frontGesture.on('tap', emitFrontCardSelected);
 
-    this.backGesture = new GestureHandler(this.backSide.node);
-    this.backGesture.on('tap', emitBackCardSelected);
 
     _bindEvents.call(this);
 
@@ -55,10 +60,10 @@ function _bindEvents() {
             if (e === 'cardSelected') {
                 if (payload.id == this.index) {
 
-                    if (payload.state == 1) {
-                        this.state = 0;
-                    } else {
-                        this.state = 1;
+                    if (payload.state == CARD_BACK) {
+                        this.state = CARD_FRONT;
+                    } else if(payload.state == CARD_FRONT) {
+                        this.state = CARD_BACK;
                     }
                 }
             }
